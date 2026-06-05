@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "487090731160",
+    "project_id": "projeto-gedersson-imepac",
+    "storage_bucket": "projeto-gedersson-imepac.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487090731160:android:1514722aef1db5b0abf8ed",
+        "android_client_info": {
+          "package_name": "br.edu.faculdade.imepac_gedersson"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDikWwMkaXrlsClXeQxfqJX_MfeAds-o4w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
