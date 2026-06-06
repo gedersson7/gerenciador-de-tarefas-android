@@ -1,6 +1,7 @@
 package br.edu.faculdade.imepac_gedersson
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,6 @@ class TarefaAdapter(
     private val listaTarefas: ArrayList<Tarefa>,
     private val isConcluida: Boolean = false,
     private val onDeleteClick: ((Tarefa, Int) -> Unit)? = null,
-    // Adicionado o parâmetro para tratar o clique do botão de concluir
     private val onConcluirClick: ((Tarefa, Int) -> Unit)? = null
 ): RecyclerView.Adapter<TarefaAdapter.TarefaViewHolder>() {
 
@@ -22,9 +22,9 @@ class TarefaAdapter(
         val txtDescricao: TextView = itemView.findViewById(R.id.txtItemDescricao)
         val txtStatus: TextView = itemView.findViewById(R.id.txtItemStatus)
         val btnDeletar: ImageView = itemView.findViewById(R.id.btnDeletarTarefa)
-        // MAPEAMENTO DOS NOVOS BOTÕES
         val btnEditar: ImageView = itemView.findViewById(R.id.btnEditarTarefa)
         val btnConcluir: ImageView = itemView.findViewById(R.id.btnConcluirTarefa)
+        val txtCategoria: TextView = itemView.findViewById(R.id.txtItemCategoria)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TarefaViewHolder {
@@ -38,8 +38,24 @@ class TarefaAdapter(
         holder.txtDescricao.text = tarefa.descricao
         holder.txtStatus.text = tarefa.status.uppercase()
 
+        val categoriaText = tarefa.categoria ?: "Outros"
+
+        val (textoComEmoji, corFundo, corTexto) = when (categoriaText) {
+            "Desenvolvimento" -> Triple("💻 Desenvolvimento", "#E3F2FD", "#1976D2") // Azul
+            "Faculdade" ->       Triple("📚 Faculdade",       "#F3E5F5", "#7B1FA2") // Roxo
+            "Treino / Saúde" ->  Triple("💪 Treino / Saúde",  "#E8F5E9", "#388E3C") // Verde
+            "Trabalho" ->        Triple("💼 Trabalho",        "#FFF3E0", "#F57C00") // Laranja
+            "Casa" ->            Triple("🏠 Casa",            "#E0F2F1", "#00796B") // Teal
+            "Lazer" ->           Triple("🎮 Lazer",           "#FFEBEE", "#D32F2F") // Vermelho
+            else ->              Triple("📌 Outros",          "#F5F5F5", "#757575") // Cinza
+        }
+
+        holder.txtCategoria.text = textoComEmoji
+        holder.txtCategoria.setTextColor(Color.parseColor(corTexto))
+        holder.txtCategoria.backgroundTintList = ColorStateList.valueOf(Color.parseColor(corFundo))
+        // -----------------------------------------------------------
+
         if (isConcluida) {
-            // TELA DE CONCLUÍDAS: Cor verde, mostra apenas a lixeira
             holder.txtStatus.setTextColor(Color.parseColor("#4CAF50"))
 
             holder.btnDeletar.visibility = View.VISIBLE
@@ -52,26 +68,22 @@ class TarefaAdapter(
 
             holder.itemView.setOnClickListener(null)
         } else {
-            // TELA PRINCIPAL (PENDENTES): Cor laranja, mostra todos os botões funcionais
             holder.txtStatus.setTextColor(Color.parseColor("#FF9800"))
 
             holder.btnDeletar.visibility = View.VISIBLE
             holder.btnEditar.visibility = View.VISIBLE
             holder.btnConcluir.visibility = View.VISIBLE
 
-            // Ação do botão Concluir (Check)
             holder.btnConcluir.setOnClickListener {
                 onConcluirClick?.invoke(tarefa, position)
             }
 
-            // Ação do botão Editar (Lápis)
             holder.btnEditar.setOnClickListener { view ->
                 val intent = Intent(view.context, TelaDetalhesTarefa::class.java)
                 intent.putExtra("idTarefa", tarefa.id)
                 view.context.startActivity(intent)
             }
 
-            // Ação do botão Deletar (Lixeira)
             holder.btnDeletar.setOnClickListener {
                 onDeleteClick?.invoke(tarefa, position)
             }

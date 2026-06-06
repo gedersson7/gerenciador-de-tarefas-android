@@ -6,84 +6,135 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
-    android:background="@android:color/white"
+    android:background="?attr/colorSurface"
     tools:context=".FormNovaTarefa">
 
     <TextView
         android:id="@+id/lblNovaTarefa"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="32dp"
         android:text="Nova Tarefa"
-        android:textSize="28sp"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="32sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/lblInstrucao"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
         android:text="Preencha os campos abaixo para adicionar uma atividade."
-        android:textSize="14sp"
-        android:textColor="@android:color/darker_gray"
-        android:layout_marginTop="4dp"
-        app:layout_constraintTop_toBottomOf="@id/lblNovaTarefa"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:textColor="#8A8A8A"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lblNovaTarefa" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutTitulo"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="32dp"
         android:hint="Título da Tarefa"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:layout_constraintTop_toBottomOf="@id/lblInstrucao"
+        app:boxCornerRadiusBottomEnd="16dp"
+        app:boxCornerRadiusBottomStart="16dp"
+        app:boxCornerRadiusTopEnd="16dp"
+        app:boxCornerRadiusTopStart="16dp"
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/lblInstrucao">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTituloTarefa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textCapSentences"
-            android:textColor="@android:color/black" />
+            android:maxLength="40"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutDescricao"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
         android:hint="Descrição detalhada"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:layout_constraintTop_toBottomOf="@id/layoutTitulo"
+        app:boxCornerRadiusBottomEnd="16dp"
+        app:boxCornerRadiusBottomStart="16dp"
+        app:boxCornerRadiusTopEnd="16dp"
+        app:boxCornerRadiusTopStart="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/layoutTitulo">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editDescricaoTarefa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
             android:gravity="top"
+            android:inputType="textMultiLine"
             android:lines="4"
-            android:textColor="@android:color/black" />
+            android:maxLines="4"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutCategoria"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:hint="Categoria"
+        app:boxCornerRadiusBottomEnd="16dp"
+        app:boxCornerRadiusBottomStart="16dp"
+        app:boxCornerRadiusTopEnd="16dp"
+        app:boxCornerRadiusTopStart="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutDescricao">
+
+        <AutoCompleteTextView
+            android:id="@+id/spinnerCategoria"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSalvarTarefa"
+        style="@style/Widget.Material3.Button"
         android:layout_width="0dp"
-        android:layout_height="55dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="32dp"
         android:text="Salvar Tarefa"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:layout_marginTop="32dp"
-        app:cornerRadius="8dp"
-        app:layout_constraintTop_toBottomOf="@id/layoutDescricao"
+        app:cornerRadius="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/layoutCategoria" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

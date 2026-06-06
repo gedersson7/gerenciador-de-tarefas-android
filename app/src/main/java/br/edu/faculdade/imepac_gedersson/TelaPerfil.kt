@@ -4,7 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -15,9 +16,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class TelaPerfil : AppCompatActivity() {
 
-    private lateinit var emailUser: EditText
-    private lateinit var usuarioUser: EditText
+    private lateinit var emailUser: TextView
+    private lateinit var usuarioUser: TextView
     private lateinit var bt_sair: Button
+    private lateinit var bt_sobre: Button
     private lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +33,11 @@ class TelaPerfil : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
 
         fetchAllNames()
+
+        bt_sobre.setOnClickListener {
+            val intent = Intent(this, TelaSobre::class.java)
+            startActivity(intent)
+        }
 
         bt_sair.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
@@ -52,7 +59,7 @@ class TelaPerfil : AppCompatActivity() {
         val userEmail = FirebaseAuth.getInstance().currentUser?.email
 
         if (userEmail != null) {
-            emailUser.setText(userEmail)
+            emailUser.text = userEmail
             buscarNomeDoEmail(userEmail)
         }
     }
@@ -68,7 +75,7 @@ class TelaPerfil : AppCompatActivity() {
                     val nome = documento.getString("nome")
 
                     if (nome != null) {
-                        usuarioUser.setText(nome)
+                        usuarioUser.text = nome
                     } else {
                         println("Nome não encontrado para o e-mail $email")
                     }
@@ -85,11 +92,12 @@ class TelaPerfil : AppCompatActivity() {
         emailUser = findViewById(R.id.textEmailUser)
         usuarioUser = findViewById(R.id.textNomeUser)
         bt_sair = findViewById(R.id.bt_sair)
+        bt_sobre = findViewById(R.id.bt_sobre)
     }
 
     private fun fetchAllNames() {
         val db = FirebaseFirestore.getInstance()
-       val usuariosRef = db.collection("Usuarios")
+        val usuariosRef = db.collection("Usuarios")
 
         usuariosRef.get().addOnSuccessListener { querySnapshot ->
             for (document in querySnapshot.documents) {

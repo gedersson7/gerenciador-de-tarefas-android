@@ -1,6 +1,8 @@
 package br.edu.faculdade.imepac_gedersson
 
 import android.os.Bundle
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -8,15 +10,16 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class FormNovaTarefa : AppCompatActivity() {
 
     private lateinit var editTitulo: TextInputEditText
     private lateinit var editDescricao: TextInputEditText
+    private lateinit var spinnerCategoria: AutoCompleteTextView // <-- Agora é AutoCompleteTextView
     private lateinit var btnSalvar: MaterialButton
 
-    // Inicializa o banco Firestore
     private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,10 +33,15 @@ class FormNovaTarefa : AppCompatActivity() {
             insets
         }
 
-        // Vincula os componentes do XML
         editTitulo = findViewById(R.id.editTituloTarefa)
         editDescricao = findViewById(R.id.editDescricaoTarefa)
+        spinnerCategoria = findViewById(R.id.spinnerCategoria)
         btnSalvar = findViewById(R.id.btnSalvarTarefa)
+
+        val categorias = arrayOf("Desenvolvimento", "Faculdade", "Treino / Saúde", "Trabalho", "Casa", "Lazer", "Outros")
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, categorias)
+        spinnerCategoria.setAdapter(adapter)
 
         btnSalvar.setOnClickListener {
             salvarTarefaNoFirestore()
@@ -43,8 +51,8 @@ class FormNovaTarefa : AppCompatActivity() {
     private fun salvarTarefaNoFirestore() {
         val titulo = editTitulo.text.toString().trim()
         val descricao = editDescricao.text.toString().trim()
+        val categoriaSelecionada = spinnerCategoria.text.toString() // Pega o texto do componente
 
-        // Validação simples de campos obrigatórios
         if (titulo.isEmpty()) {
             editTitulo.error = "O título é obrigatório"
             return
@@ -53,20 +61,27 @@ class FormNovaTarefa : AppCompatActivity() {
             editDescricao.error = "A descrição é obrigatória"
             return
         }
+        if (categoriaSelecionada.isEmpty()) {
+            Toast.makeText(this, "Selecione uma categoria", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-        // Criando o mapa de dados (Objeto que vai pro Firestore)
+        val idUsuarioAtual = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+
         val tarefa = hashMapOf(
             "titulo" to titulo,
             "descricao" to descricao,
-            "status" to "pendente" // Define um status padrão para a nova tarefa
+            "status" to "pendente",
+            "categoria" to categoriaSelecionada,
+            "dataCriacao" to System.currentTimeMillis(),
+            "userId" to idUsuarioAtual
         )
 
-        // Executa o INSERT (add cria um ID único aleatório automaticamente)
         db.collection("tarefas")
             .add(tarefa)
             .addOnSuccessListener {
                 Toast.makeText(this, "Tarefa salva com sucesso!", Toast.LENGTH_SHORT).show()
-                finish() // Fecha esta tela e volta para a anterior automaticamente
+                finish()
             }
             .addOnFailureListener { erro ->
                 Toast.makeText(this, "Erro ao salvar tarefa: ${erro.message}", Toast.LENGTH_LONG).show()

@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Imepacgedersson" parent="Theme.MaterialComponents.Light.NoActionBar"/>
+    <style name="Theme.Imepacgedersson" parent="Theme.Material3.Light.NoActionBar">
+
+        <item name="colorPrimary">#4F46E5</item>
+        <item name="colorSecondary">#818CF8</item>
+
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="android:colorBackground">#FFFFFF</item>
+
+        <item name="colorOnSurface">#1A1A1A</item>
+
+        <item name="android:statusBarColor">#FFFFFF</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+    </style>
 
 </resources>

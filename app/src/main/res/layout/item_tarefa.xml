@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Material3.CardView.Outlined"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
+    android:layout_marginHorizontal="24dp"
     android:layout_marginVertical="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="2dp"
-    app:cardBackgroundColor="@android:color/white">
+    app:cardCornerRadius="16dp"
+    app:strokeColor="#E2E8F0"
+    app:strokeWidth="1.5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,89 +18,106 @@
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/txtItemCategoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_tag"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp"
+            android:text="Categoria"
+            android:textColor="#2196F3"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/txtItemTitulo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
             android:text="Título da Tarefa"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@android:color/black"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/txtItemCategoria"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/layoutAcoes"
-            android:layout_marginEnd="16dp"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/txtItemDescricao"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="Descrição da tarefa"
+            android:textColor="#8A8A8A"
             android:textSize="14sp"
-            android:textColor="#757575"
-            android:layout_marginTop="4dp"
-            app:layout_constraintTop_toBottomOf="@id/txtItemTitulo"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/layoutAcoes"
-            android:layout_marginEnd="16dp"/>
+            app:layout_constraintTop_toBottomOf="@id/txtItemTitulo" />
 
         <TextView
             android:id="@+id/txtItemStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CONCLUÍDA"
-            android:textSize="12sp"
-            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:background="#E8F5E9"
             android:paddingHorizontal="8dp"
             android:paddingVertical="4dp"
-            android:layout_marginTop="12dp"
-            android:background="#FFF3E0"
-            app:layout_constraintTop_toBottomOf="@id/txtItemDescricao"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:text="CONCLUÍDA"
+            android:textColor="#2E7D32"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtItemDescricao" />
 
         <LinearLayout
             android:id="@+id/layoutAcoes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtItemDescricao">
 
             <ImageView
                 android:id="@+id/btnConcluirTarefa"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_check"
-                android:padding="4dp"
-                android:layout_marginEnd="8dp"
-                app:tint="#4CAF50"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="4dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
-                android:focusable="true" />
+                android:focusable="true"
+                android:padding="8dp"
+                android:src="@drawable/ic_check"
+                app:tint="#4CAF50" />
 
             <ImageView
                 android:id="@+id/btnEditarTarefa"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@android:drawable/ic_menu_edit"
-                android:padding="4dp"
-                android:layout_marginEnd="8dp"
-                app:tint="#2196F3"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="4dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
-                android:focusable="true" />
+                android:focusable="true"
+                android:padding="8dp"
+                android:src="@android:drawable/ic_menu_edit"
+                app:tint="#2196F3" />
 
             <ImageView
                 android:id="@+id/btnDeletarTarefa"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@android:drawable/ic_menu_delete"
-                android:padding="4dp"
-                app:tint="#000000"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
-                android:focusable="true" />
+                android:focusable="true"
+                android:padding="8dp"
+                android:src="@android:drawable/ic_menu_delete"
+                app:tint="?attr/colorError" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

@@ -3,12 +3,12 @@ package br.edu.faculdade.imepac_gedersson
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.snackbar.Snackbar
@@ -18,7 +18,8 @@ class FormLogin : AppCompatActivity() {
 
     private lateinit var edit_email: EditText
     private lateinit var edit_senha: EditText
-    private lateinit var bt_entrada: AppCompatButton
+    private lateinit var bt_entrada: Button
+    private lateinit var text_esqueci_senha: Button // <-- Declarando o botão de recuperar senha
     private lateinit var progressbar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +30,12 @@ class FormLogin : AppCompatActivity() {
         supportActionBar?.hide()
 
         IniciarComponentes()
+
+        // <-- Ação do botão Esqueci Minha Senha -->
+        text_esqueci_senha.setOnClickListener {
+            val intent = Intent(this, TelaEsqueciSenha::class.java)
+            startActivity(intent)
+        }
 
         bt_entrada.setOnClickListener { it: View ->
             val email = edit_email.text.toString()
@@ -43,7 +50,7 @@ class FormLogin : AppCompatActivity() {
             }
         }
 
-        val linkFormCadastro = findViewById<TextView>(R.id.text_tela_cadastro)
+        val linkFormCadastro = findViewById<Button>(R.id.text_tela_cadastro)
 
         linkFormCadastro.setOnClickListener {
             val telaCadastro = Intent(this, FormCadastro::class.java)
@@ -67,7 +74,6 @@ class FormLogin : AppCompatActivity() {
             if (task.isSuccessful) {
                 progressbar.visibility = View.GONE
 
-                // AQUI FOI FEITA A ALTERAÇÃO: Redirecionando para TelaPrincipal
                 val intent = Intent(this@FormLogin, TelaPrincipal::class.java)
                 startActivity(intent)
                 finish()
@@ -89,10 +95,10 @@ class FormLogin : AppCompatActivity() {
         edit_email = findViewById(R.id.edit_email_login)
         edit_senha = findViewById(R.id.edit_senha_login)
         bt_entrada = findViewById(R.id.bt_entrada)
+        text_esqueci_senha = findViewById(R.id.text_esqueci_senha) // <-- Vinculando o componente do XML
         progressbar = findViewById(R.id.progressbar)
     }
 
-    // Excelente detalhe de UX esse dispatchTouchEvent para esconder o teclado!
     override fun dispatchTouchEvent(event: android.view.MotionEvent): Boolean {
         if (event.action == android.view.MotionEvent.ACTION_DOWN) {
             val v = currentFocus

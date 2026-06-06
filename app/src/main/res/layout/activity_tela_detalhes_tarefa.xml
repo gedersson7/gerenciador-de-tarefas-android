@@ -6,96 +6,154 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
-    android:background="@android:color/white"
+    android:background="?attr/colorSurface"
     tools:context=".TelaDetalhesTarefa">
 
     <TextView
         android:id="@+id/lblDetalhes"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="32dp"
         android:text="Detalhes da Tarefa"
-        android:textSize="28sp"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="32sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtStatusAtual"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
         android:text="Status: CARREGANDO..."
-        android:textSize="14sp"
+        android:textColor="#F57C00"
+        android:textSize="15sp"
         android:textStyle="bold"
-        android:textColor="#FF9800"
-        android:layout_marginTop="4dp"
-        app:layout_constraintTop_toBottomOf="@id/lblDetalhes"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lblDetalhes" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutTitulo"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
         android:hint="Título da Tarefa"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:layout_constraintTop_toBottomOf="@id/txtStatusAtual"
+        app:boxCornerRadiusBottomEnd="16dp"
+        app:boxCornerRadiusBottomStart="16dp"
+        app:boxCornerRadiusTopEnd="16dp"
+        app:boxCornerRadiusTopStart="16dp"
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/txtStatusAtual">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTituloDetalhe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black" />
+            android:inputType="textCapSentences"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutDescricao"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
         android:hint="Descrição detalhada"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:layout_constraintTop_toBottomOf="@id/layoutTitulo"
+        app:boxCornerRadiusBottomEnd="16dp"
+        app:boxCornerRadiusBottomStart="16dp"
+        app:boxCornerRadiusTopEnd="16dp"
+        app:boxCornerRadiusTopStart="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/layoutTitulo">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editDescricaoDetalhe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
             android:gravity="top"
+            android:inputType="textMultiLine"
             android:lines="4"
-            android:textColor="@android:color/black" />
+            android:maxLines="4"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutCategoria"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:hint="Categoria"
+        app:boxCornerRadiusBottomEnd="16dp"
+        app:boxCornerRadiusBottomStart="16dp"
+        app:boxCornerRadiusTopEnd="16dp"
+        app:boxCornerRadiusTopStart="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutDescricao">
+
+        <AutoCompleteTextView
+            android:id="@+id/spinnerCategoriaDetalhe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSalvarEdicao"
+        style="@style/Widget.Material3.Button"
         android:layout_width="0dp"
-        android:layout_height="55dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
         android:text="Salvar Alterações"
-        android:layout_marginTop="24dp"
-        app:cornerRadius="8dp"
-        app:layout_constraintTop_toBottomOf="@id/layoutDescricao"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/layoutCategoria" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnConcluirTarefa"
+        style="@style/Widget.Material3.Button.OutlinedButton"
         android:layout_width="0dp"
-        android:layout_height="55dp"
-        android:text="Concluir Atividade"
+        android:layout_height="56dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="12dp"
-        app:cornerRadius="8dp"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        app:strokeColor="#4CAF50"
+        android:layout_marginEnd="32dp"
+        android:text="Concluir Atividade"
         android:textColor="#4CAF50"
-        app:layout_constraintTop_toBottomOf="@id/btnSalvarEdicao"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="16dp"
+        app:strokeColor="#4CAF50"
+        app:strokeWidth="1.5dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/btnSalvarEdicao" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

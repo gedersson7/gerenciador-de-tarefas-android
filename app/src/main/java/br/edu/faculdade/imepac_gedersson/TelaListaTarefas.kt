@@ -2,6 +2,9 @@ package br.edu.faculdade.imepac_gedersson
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -11,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -21,19 +25,21 @@ class TelaListaTarefas : AppCompatActivity() {
     private lateinit var btnAnterior: MaterialButton
     private lateinit var btnProximo: MaterialButton
     private lateinit var btnIrConcluidas: MaterialButton
+    private lateinit var btnOrdenar: ImageView
     private lateinit var txtPaginaAtual: TextView
     private lateinit var adapter: TarefaAdapter
 
     private val listaTarefas = ArrayList<Tarefa>()
     private val db = FirebaseFirestore.getInstance()
 
-    // Variáveis de controle de Paginação
     private var currentPage = 1
     private val LIMIT_PAGINA = 5L
     private var firstVisible: DocumentSnapshot? = null
     private var lastVisible: DocumentSnapshot? = null
 
-    // Controle de direção da busca
+    enum class TipoOrdenacao { AZ, RECENTES }
+    private var ordenacaoAtual = TipoOrdenacao.AZ
+
     enum class Direcao { INICIAL, PROXIMO, ANTERIOR }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,11 +57,11 @@ class TelaListaTarefas : AppCompatActivity() {
         btnAnterior = findViewById(R.id.btnAnterior)
         btnProximo = findViewById(R.id.btnProximo)
         btnIrConcluidas = findViewById(R.id.btnIrConcluidas)
+        btnOrdenar = findViewById(R.id.btnOrdenar)
         txtPaginaAtual = findViewById(R.id.txtPaginaAtual)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // 1. INICIALIZANDO O ADAPTER COM AS FUNÇÕES DE CLIQUE
         adapter = TarefaAdapter(
             listaTarefas,
             isConcluida = false,
@@ -64,7 +70,6 @@ class TelaListaTarefas : AppCompatActivity() {
         )
         recyclerView.adapter = adapter
 
-        // Ao abrir a tela, carrega a página 1
         carregarDados(Direcao.INICIAL)
 
         btnProximo.setOnClickListener {
@@ -75,10 +80,13 @@ class TelaListaTarefas : AppCompatActivity() {
             carregarDados(Direcao.ANTERIOR)
         }
 
-        // Abre a tela de Histórico (Lista Alternativa)
         btnIrConcluidas.setOnClickListener {
             val intent = Intent(this, TelaTarefasConcluidas::class.java)
             startActivity(intent)
+        }
+
+        btnOrdenar.setOnClickListener { view ->
+            mostrarMenuOrdenacao(view)
         }
     }
 
@@ -89,11 +97,49 @@ class TelaListaTarefas : AppCompatActivity() {
         }
     }
 
+    private fun mostrarMenuOrdenacao(view: View) {
+        val popupMenu = PopupMenu(this, view)
+
+        // Adicionando as opções no menu
+        popupMenu.menu.add(0, 1, 0, "A-Z (Ordem Alfabética)")
+        popupMenu.menu.add(0, 2, 1, "Mais Recentes Primeiro")
+
+        // O que acontece quando clica em uma das opções:
+        popupMenu.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                1 -> {
+                    ordenacaoAtual = TipoOrdenacao.AZ
+                    carregarDados(Direcao.INICIAL)
+                    true
+                }
+                2 -> {
+                    ordenacaoAtual = TipoOrdenacao.RECENTES
+                    carregarDados(Direcao.INICIAL)
+                    true
+                }
+                else -> false
+            }
+        }
+        popupMenu.show()
+    }
+
     private fun carregarDados(direcao: Direcao) {
-        // 2. FILTRO ADICIONADO: Puxar apenas as tarefas "pendentes" na tela principal
+        val idUsuarioAtual = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val categoriaEscolhida = intent.getStringExtra("CATEGORIA_FILTRO")
+
         var query = db.collection("tarefas")
+            .whereEqualTo("userId", idUsuarioAtual)
             .whereEqualTo("status", "pendente")
-            .orderBy("titulo", Query.Direction.ASCENDING)
+
+        if (categoriaEscolhida != null) {
+            query = query.whereEqualTo("categoria", categoriaEscolhida)
+        }
+
+        query = if (ordenacaoAtual == TipoOrdenacao.AZ) {
+            query.orderBy("titulo", Query.Direction.ASCENDING)
+        } else {
+            query.orderBy("dataCriacao", Query.Direction.DESCENDING)
+        }
 
         when (direcao) {
             Direcao.INICIAL -> {
@@ -130,7 +176,13 @@ class TelaListaTarefas : AppCompatActivity() {
                     atualizarUIPaginacao(direcao, documentos.size())
 
                 } else {
-                    if (direcao == Direcao.PROXIMO) {
+                    if (direcao == Direcao.INICIAL) {
+                        listaTarefas.clear()
+                        adapter.notifyDataSetChanged()
+                        Toast.makeText(this, "Nenhuma tarefa encontrada.", Toast.LENGTH_SHORT).show()
+                        btnProximo.isEnabled = false
+                        btnAnterior.isEnabled = false
+                    } else if (direcao == Direcao.PROXIMO) {
                         Toast.makeText(this, "Esta já é a última página.", Toast.LENGTH_SHORT).show()
                         btnProximo.isEnabled = false
                     }
@@ -154,7 +206,6 @@ class TelaListaTarefas : AppCompatActivity() {
         btnProximo.isEnabled = itensRetornados == LIMIT_PAGINA.toInt()
     }
 
-    // 3. NOVA FUNÇÃO: Deleta a tarefa do Firebase
     private fun deletarTarefaDoFirestore(tarefa: Tarefa, posicao: Int) {
         tarefa.id?.let { id ->
             db.collection("tarefas").document(id).delete().addOnSuccessListener {
@@ -166,7 +217,6 @@ class TelaListaTarefas : AppCompatActivity() {
         }
     }
 
-    // 4. NOVA FUNÇÃO: Atualiza o status para "concluída" no Firebase
     private fun alterarStatusParaConcluido(tarefa: Tarefa, posicao: Int) {
         tarefa.id?.let { id ->
             db.collection("tarefas").document(id).update("status", "concluída").addOnSuccessListener {

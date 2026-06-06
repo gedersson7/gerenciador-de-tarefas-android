@@ -7,33 +7,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSurface"
-    tools:context=".FormLogin">
-
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        android:layout_marginTop="32dp"
-        android:contentDescription="logo"
-        android:src="@drawable/logo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    tools:context=".TelaRecuperacaoSenha">
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="72dp"
         android:layout_marginEnd="32dp"
-        android:text="Bem-vindo(a)"
+        android:text="Recuperar Senha"
         android:textColor="?attr/colorOnSurface"
         android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logo" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_subtitle"
@@ -42,7 +31,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
-        android:text="Faça login para gerenciar suas tarefas."
+        android:text="Digite o e-mail cadastrado. Enviaremos um link para você redefinir sua senha."
         android:textColor="#8A8A8A"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -50,14 +39,14 @@
         app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_email_login"
+        android:id="@+id/layout_email_recuperacao"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="32dp"
-        android:hint="E-mail"
+        android:hint="Seu e-mail"
         app:boxCornerRadiusBottomEnd="16dp"
         app:boxCornerRadiusBottomStart="16dp"
         app:boxCornerRadiusTopEnd="16dp"
@@ -69,74 +58,32 @@
         app:layout_constraintTop_toBottomOf="@id/tv_subtitle">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_email_login"
+            android:id="@+id/edit_email_recuperacao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:maxLength="50"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="16sp" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_senha_login"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:hint="Senha"
-        app:boxCornerRadiusBottomEnd="16dp"
-        app:boxCornerRadiusBottomStart="16dp"
-        app:boxCornerRadiusTopEnd="16dp"
-        app:boxCornerRadiusTopStart="16dp"
-        app:endIconMode="password_toggle"
-        app:startIconDrawable="@drawable/lock"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_email_login">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_senha_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:maxLength="25"
             android:textColor="?attr/colorOnSurface"
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/text_esqueci_senha"
-        style="@style/Widget.Material3.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:text="Esqueci minha senha"
-        android:textColor="?attr/colorPrimary"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_senha_login" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/bt_entrada"
+        android:id="@+id/btnRecuperarSenha"
         style="@style/Widget.Material3.Button"
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:text="Entrar"
+        android:text="Enviar Link"
         android:textSize="16sp"
         android:textStyle="bold"
         app:cornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_esqueci_senha" />
+        app:layout_constraintTop_toBottomOf="@id/layout_email_recuperacao" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/progressbar"
+        android:id="@+id/progressbar_recuperacao"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -146,15 +93,15 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bt_entrada" />
+        app:layout_constraintTop_toBottomOf="@id/btnRecuperarSenha" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/text_tela_cadastro"
+        android:id="@+id/txtVoltarLogin"
         style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:text="Não possui conta? Cadastre-se"
+        android:layout_marginBottom="32dp"
+        android:text="Voltar para o Login"
         android:textColor="?attr/colorPrimary"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"

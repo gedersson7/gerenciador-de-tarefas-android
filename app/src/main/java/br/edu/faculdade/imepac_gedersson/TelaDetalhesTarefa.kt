@@ -1,6 +1,8 @@
 package br.edu.faculdade.imepac_gedersson
 
 import android.os.Bundle
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -15,12 +17,15 @@ class TelaDetalhesTarefa : AppCompatActivity() {
 
     private lateinit var editTitulo: TextInputEditText
     private lateinit var editDescricao: TextInputEditText
+    private lateinit var spinnerCategoria: AutoCompleteTextView // <-- Alterado para AutoCompleteTextView
     private lateinit var txtStatus: TextView
     private lateinit var btnSalvar: MaterialButton
     private lateinit var btnConcluir: MaterialButton
 
     private val db = FirebaseFirestore.getInstance()
     private var idTarefa: String? = null
+
+    private val categorias = arrayOf("Desenvolvimento", "Faculdade", "Treino / Saúde", "Trabalho", "Casa", "Lazer", "Outros")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,11 +40,14 @@ class TelaDetalhesTarefa : AppCompatActivity() {
 
         editTitulo = findViewById(R.id.editTituloDetalhe)
         editDescricao = findViewById(R.id.editDescricaoDetalhe)
+        spinnerCategoria = findViewById(R.id.spinnerCategoriaDetalhe)
         txtStatus = findViewById(R.id.txtStatusAtual)
         btnSalvar = findViewById(R.id.btnSalvarEdicao)
         btnConcluir = findViewById(R.id.btnConcluirTarefa)
 
-        // Recebe o ID da tarefa que foi clicada na lista
+        val adapterSpinner = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, categorias)
+        spinnerCategoria.setAdapter(adapterSpinner)
+
         idTarefa = intent.getStringExtra("idTarefa")
 
         if (idTarefa != null) {
@@ -49,12 +57,10 @@ class TelaDetalhesTarefa : AppCompatActivity() {
             finish()
         }
 
-        // Ação: Atualizar textos
         btnSalvar.setOnClickListener {
             atualizarTarefa(idTarefa!!, false)
         }
 
-        // Ação: Encerrar atividade (Mudar status para concluída)
         btnConcluir.setOnClickListener {
             atualizarTarefa(idTarefa!!, true)
         }
@@ -67,12 +73,16 @@ class TelaDetalhesTarefa : AppCompatActivity() {
                     editTitulo.setText(documento.getString("titulo"))
                     editDescricao.setText(documento.getString("descricao"))
 
+                    val categoriaSalva = documento.getString("categoria") ?: "Outros"
+
+                    spinnerCategoria.setText(categoriaSalva, false)
+
                     val statusAtual = documento.getString("status") ?: "pendente"
                     txtStatus.text = "Status: ${statusAtual.uppercase()}"
 
                     if (statusAtual == "concluída") {
                         txtStatus.setTextColor(android.graphics.Color.parseColor("#4CAF50"))
-                        btnConcluir.isEnabled = false // Desabilita o botão se já estiver concluída
+                        btnConcluir.isEnabled = false
                     }
                 }
             }
@@ -89,9 +99,10 @@ class TelaDetalhesTarefa : AppCompatActivity() {
         } else {
             updates["titulo"] = editTitulo.text.toString().trim()
             updates["descricao"] = editDescricao.text.toString().trim()
+            // Pega o texto diretamente do componente AutoCompleteTextView
+            updates["categoria"] = spinnerCategoria.text.toString()
         }
 
-        // Comando UPDATE do Firestore
         db.collection("tarefas").document(id).update(updates)
             .addOnSuccessListener {
                 val msg = if (apenasConcluir) "Tarefa concluída!" else "Alterações salvas!"
