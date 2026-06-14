@@ -7,8 +7,6 @@
 
 O **NexTask** é uma aplicação Android nativa desenvolvida como projeto prático para o curso de **Análise e Desenvolvimento de Sistemas (ADS) na Imepac**. O objetivo principal foi construir um ecossistema completo com operações de CRUD avançadas, persistência de dados na nuvem, paginação eficiente e regras estritas de segurança.
 
-🎥 **[Assista à apresentação do projeto no YouTube](SUBSTITUA_POR_ESTE_LINK)**
-
 ---
 
 ## 🚀 Requisitos Técnicos Atendidos (Funcionalidades)
